@@ -63,7 +63,8 @@ void IndicatePlayer(Character* ch)
 {
 	// ★ここをコーディングしてください。
 	// 仕様を参考に、プレーヤの表示を行います。
-	printf("%s\n", ch->g);
+	printf("%s\n", ch->name);
+	printf("HP：%d／%d　MP：%d／%d\n", ch->hp, ch->maxHp, ch->mp, ch->maxMp);
 }
 // エネミー表示を行う
 void IndicateEnemy(Character* ch)
@@ -71,7 +72,10 @@ void IndicateEnemy(Character* ch)
 	// ★ここをコーディングしてください。
 	// 仕様を参考に、エネミーの表示を行います。
 	// エネミーが死亡すると、アスキーアートは消します(表示しません)
-	printf("")
+	if (ch->isEraseAa == false) {
+		printf("%s", ch->aa);
+	}
+	printf("(HP：%d／%d)", ch->hp, ch->maxHp);
 }
 // 攻撃力から与えるダメージを計算
 int CalcDamage(Character* ch)
@@ -79,6 +83,8 @@ int CalcDamage(Character* ch)
 	// ★ここをコーディングしてください。
 	// 敵に与えるダメージは、1～attack の乱数です。
 	// Utility.cpp の GetRand(int max)を使用してください。
+	int damage = GetRand(ch->attack) + 1;
+	return damage;
 }
 // 名前を取得
 const char* GetName(Character* ch)
