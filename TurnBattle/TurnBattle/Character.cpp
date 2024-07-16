@@ -63,8 +63,15 @@ void IndicatePlayer(Character* ch)
 {
 	// ★ここをコーディングしてください。
 	// 仕様を参考に、プレーヤの表示を行います。
+	if (ch->hp <= ch->maxHp / 3) {
+		printf(EscYELLOW);
+		if (ch->hp <= ch->maxHp / 5) {
+			printf(EscRED);
+		}
+	}
 	printf("%s\n", ch->name);
 	printf("HP：%d／%d　MP：%d／%d\n", ch->hp, ch->maxHp, ch->mp, ch->maxMp);
+	printf(EscDEFAULT);
 }
 // エネミー表示を行う
 void IndicateEnemy(Character* ch)

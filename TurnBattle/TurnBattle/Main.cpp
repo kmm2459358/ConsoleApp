@@ -33,17 +33,18 @@ void game()
 	Character player;
 	Character boss;
 	Character zako;
+	Character tyuboss;
 	TurnBattle btl;
 
 	SetCharacter(&player,
 		100,        // HP
 		15,         // MP
-		30,         // 攻撃力
+		40,         // 攻撃力
 		"ゆうしゃ", // 名前
 		"");        // アスキーアート
 	SetCharacter(&boss,
 		255,      // HP
-		0,        // MP
+		6,        // MP
 		50,       // 攻撃力
 		"まおう", // 名前
 		"　　Ａ＠Ａ\n" // アスキーアート
@@ -51,14 +52,24 @@ void game()
 	);
 	SetCharacter(&zako,
 		3,          // HP
-		0,          // MP
+		3,          // MP
 		2,          // 攻撃力
 		"スライム", // 名前 
 		"／・Д・＼\n" // アスキーアート
 		"～～～～～"
 	);
+	SetCharacter(&tyuboss,
+		120,          // HP
+		6,          // MP
+		25,          // 攻撃力
+		"モナー", // 名前 
+		"　　   ∧__∧\n" // アスキーアート
+		"　　（ ´∀｀）\n"
+		"　　 (   O┬O\n"
+		" ≡◎-ヽJ ┴◎"
+	);
 
-	SetTurnBattle(&btl, &player, &boss);
+	SetTurnBattle(&btl, &player, &tyuboss);
 	StartTurnBattle(&btl);
 	IntroTurnBattle(&btl);
 	bool isEnd = false;
