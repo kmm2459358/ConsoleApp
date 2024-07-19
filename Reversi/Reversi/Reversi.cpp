@@ -205,6 +205,9 @@ void DrawScreen(Reversi* reversi, Vector2 pos, DrawStatus stat)
 	}
 	putchar('\n');
 
+	//現在のコマ数表示
+	printf("現在のコマ数：黒%d,白%d\n", getDiskCount(reversi, BLACK), getDiskCount(reversi, WHITE));
+
 	switch (stat) {
 	case IN_PLAY:
 	case NO_PLACE:
