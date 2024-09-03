@@ -231,7 +231,7 @@ namespace Reversi_CS
                             );
                         if (blackCount == whiteCount)
                         {
-                            Utility.Puts("引き分けです");
+                            Utility.Printf("引き分けです\n");
                         }
                         else
                         {
@@ -289,6 +289,7 @@ namespace Reversi_CS
             }
             return Cell.Out;
         }
+
         protected static string getTurnName(Cell turn)
         {
             switch (turn)

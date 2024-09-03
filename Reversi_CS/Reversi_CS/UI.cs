@@ -22,7 +22,7 @@ namespace Reversi_CS
             while (true)
             {
                 Utility.ClearScreen();
-                Utility.Puts("モードを　選択して\nください\n");
+                Utility.Printf("モードを　選択して\nください\n");
                 for (int i = 0; i < modeName.Length; i++)
                 {
                     string cur = (sel == i) ? "＞" : "　";

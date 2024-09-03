@@ -1,23 +1,79 @@
 ﻿//======================================
-//      リバーシ AI(CPUプレイヤー思考)
+//      リバーシ　メイン
 //======================================
-using System;
-using System.Collections.Generic;  // List<T>
-using Utility = GP2.Utility;
-using Vector2 = GP2.Vector2;
+using GP2;
 
 namespace Reversi_CS
 {
-    internal class AI
+    class ReversiMain
     {
-        // CPUプレーヤの打つ場所を得る
-        public static Vector2 GetCpuPlayerPosition(Reversi reversi)
+        const int FIELD_WIDTH = 48;
+        const int FIELD_HEIGHT = 48;
+
+        static int Main()
         {
-            List<Vector2> list = new List<Vector2>(100);
-            // 打てるリストからランダムに選ぶ.
-            reversi.ListCanPlaceAll(reversi.turn, list);
-            int idx = Utility.GetRand(list.Count);
-            return list[idx];
+            Utility.InitRand();
+
+            ConsoleKey c;
+            do
+            {
+                Game();
+                Utility.Printf("もう一度(y/n)?");
+                Utility.PrintOut();
+                while (true)
+                {
+                    c = Utility.GetKey();
+                    if (c == ConsoleKey.Y || c == ConsoleKey.N)
+                    {
+                        break;
+                    }
+                }
+            } while (c == ConsoleKey.Y);
+
+            return 0;
         }
-    } // class
+        // ゲーム処理
+        static void Game()
+        {
+            Vector2 dummyPos = new Vector2(-1, -1);
+            GameMode mode = UI.SelectMode();
+            Reversi reversi = new Reversi(mode);
+            while (true)
+            {
+                Cell turn = reversi.turn;
+                // 打てるところがあるか?
+                if (reversi.CheckCanPlaceAll(turn))
+                {
+                    Vector2 placePos;
+                    if (reversi.IsHumanPlayer())
+                    {
+                        placePos = UI.InputPosition(reversi);
+                    }
+                    else
+                    {
+                        reversi.DrawScreen(dummyPos, DrawStatus.InPlay);
+                        Utility.WaitKey();
+                        placePos = AI.GetCpuPlayerPosition(reversi);
+                    }
+                    reversi.CheckCanPlace(turn, placePos, true);
+                    reversi.SetBoard(placePos.x, placePos.y, turn);
+                }
+                else
+                {
+                    // 相手も打てないなら終了
+                    Cell opponent = Reversi.GetOpponent(turn);
+                    if (reversi.CheckCanPlaceAll(opponent) == false)
+                    {
+                        break;
+                    }
+                    reversi.DrawScreen(dummyPos, DrawStatus.NoSpace);
+                    Utility.WaitKey();
+                }
+                reversi.NextTurn();
+            }
+            // リザルト表示
+            reversi.DrawScreen(dummyPos, DrawStatus.Result);
+            Utility.WaitKey();
+        }
+    } // class ReversiMain
 } // namespace
