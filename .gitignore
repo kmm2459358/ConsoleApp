@@ -396,3 +396,5 @@ FodyWeavers.xsd
 
 # JetBrains Rider
 *.sln.iml
+/SengokuSimulation/SengokuSimulation/Troop.h
+/SengokuSimulation/SengokuSimulation/Troop.h
