@@ -1,5 +1,5 @@
-//======================================
-//	í‘ƒVƒ~ƒ…ƒŒ[ƒVƒ‡ƒ“  ”N•\
+ï»¿//======================================
+//	æˆ¦å›½ã‚·ãƒŸãƒ¥ãƒ¬ãƒ¼ã‚·ãƒ§ãƒ³  å¹´è¡¨
 //======================================
 #ifndef __CHRONOLOGY_H
 #define __CHRONOLOGY_H
@@ -10,15 +10,15 @@ typedef struct {
 	char* temp;
 } Chronology;
 
-// ‰Šú‰»
+// åˆæœŸåŒ–
 void InitializeChronology(Chronology* chro, int buffSize);
-// Œãn––
+// å¾Œå§‹æœ«
 void FinalizeChronology(Chronology* chro);
-// ƒNƒŠƒA
+// ã‚¯ãƒªã‚¢
 void ClearChronology(Chronology* chro);
-// ‹L˜^‚·‚é
+// è¨˜éŒ²ã™ã‚‹
 void RecordChronology(Chronology* chro, const char* fmt, ...);
-// ƒvƒŠƒ“ƒg‚·‚é
+// ãƒ—ãƒªãƒ³ãƒˆã™ã‚‹
 void PrintChronology(Chronology* chro);
 
 #endif // __CHRONOLOGY_H

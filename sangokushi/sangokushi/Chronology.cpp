@@ -1,5 +1,5 @@
-//======================================
-//	í‘ƒVƒ~ƒ…ƒŒ[ƒVƒ‡ƒ“  ”N•\
+ï»¿//======================================
+//	æˆ¦å›½ã‚·ãƒŸãƒ¥ãƒ¬ãƒ¼ã‚·ãƒ§ãƒ³  å¹´è¡¨
 //======================================
 #include "Chronology.h"
 #include <stdio.h>   // printf(),vsnprintf(),snprintf()
@@ -9,19 +9,19 @@
 
 const int TEMP_SIZE = 256;
 
-// ‰Šú‰»
+// åˆæœŸåŒ–
 void InitializeChronology(Chronology* chro, int buffSize)
 {
 	chro->buff = (char*)malloc(buffSize);
 	chro->temp = (char*)malloc(TEMP_SIZE);
 	if (chro->buff == nullptr || chro->temp == nullptr) {
-		puts("mallocŽ¸”s");
+		puts("mallocå¤±æ•—");
 		exit(1);
 	}
 	chro->buffSize = buffSize;
 	ClearChronology(chro);
 }
-// ŒãŽn––
+// å¾Œå§‹æœ«
 void FinalizeChronology(Chronology* chro)
 {
 	free(chro->buff);
@@ -30,29 +30,29 @@ void FinalizeChronology(Chronology* chro)
 	chro->temp = nullptr;
 	chro->buffSize = 0;
 }
-// ƒNƒŠƒA
+// ã‚¯ãƒªã‚¢
 void ClearChronology(Chronology* chro)
 {
 	chro->buff[0] = '\0';
 }
-// ‹L˜^‚·‚é
+// è¨˜éŒ²ã™ã‚‹
 void RecordChronology(Chronology* chro, const char* fmt, ...)
 {
 	//
-	// temp ‚Ö•¶Žš—ñ¶¬
+	// temp ã¸æ–‡å­—åˆ—ç”Ÿæˆ
 	//
 	va_list vl;
 	va_start(vl, fmt);
 	vsnprintf(chro->temp, TEMP_SIZE, fmt, vl);
 	va_end(vl);
 	//
-	//  buff ‚É temp ‚ð’Ç‰Á
+	//  buff ã« temp ã‚’è¿½åŠ 
 	//
 	int len = strlen(chro->buff);
 	int buffSize = chro->buffSize - len;
 	snprintf(chro->buff + len, buffSize, "%s", chro->temp);
 }
-// •\Ž¦
+// è¡¨ç¤º
 void PrintChronology(Chronology* chro)
 {
 	printf("%s", chro->buff);

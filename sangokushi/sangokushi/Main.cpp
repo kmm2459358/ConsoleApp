@@ -1,5 +1,5 @@
-//======================================
-//	í‘ƒVƒ~ƒ…ƒŒ[ƒVƒ‡ƒ“ ƒƒCƒ“
+ï»¿//======================================
+//	ä¸‰å›½å¿— ãƒ¡ã‚¤ãƒ³
 //======================================
 #include "Stage.h"
 #include "Lord.h"
@@ -8,7 +8,7 @@
 #include "Chronology.h"
 #include <stdio.h>   // printf(),putchar()
 #include <stdlib.h>
-// ŠÖ”ƒvƒƒgƒ^ƒCƒv
+// é–¢æ•°ãƒ—ãƒ­ãƒˆã‚¿ã‚¤ãƒ—
 static void game();
 static void DrawHonnojiEvent(Stage* stage);
 static void DrawGameOver(Stage* stage);
@@ -16,12 +16,13 @@ static void DrawEnding(Stage* stage);
 
 int main()
 {
+    system("chcp 65001");// [6-5-0]ã‚³ãƒ³ã‚½ãƒ¼ãƒ«ã®æ–‡å­—ã‚»ãƒƒãƒˆã‚’UTF-8ã«è¨­å®šã™ã‚‹
     InitRand();
 
     int c;
     do {
         game();
-        printf("‚à‚¤ˆê“x(y/n)?");
+        printf("ã‚‚ã†ä¸€åº¦(y/n)?");
         while (true) {
             c = GetKey();
             if (c == 'y' || c == 'n') {
@@ -33,7 +34,7 @@ int main()
 }
 
 const int CHRONOLOGY_BUFF_SIZE = 1024;
-const int START_YEAR = 1570;
+const int START_YEAR = 196;
 extern Castle castles[];
 
 static void game()
@@ -49,74 +50,50 @@ static void game()
     IntroStage(stage, playerCastle);
 
     while (true) {
-        // ƒ^[ƒ“‚Ì‡”Ô‚ğƒVƒƒƒtƒ‹
+        // ã‚¿ãƒ¼ãƒ³ã®é †ç•ªã‚’ã‚·ãƒ£ãƒ•ãƒ«
         MakeTurnOrder(stage);
         for (int i = 0; i < stage->castlesSize; i++) {
-            // Šeé‚Ìƒ^[ƒ“Às
+            // å„åŸã®ã‚¿ãƒ¼ãƒ³å®Ÿè¡Œ
             ExecTurn(stage, i);
-            // ƒvƒŒ[ƒ„‚Ì•‰‚¯?
+            // ãƒ—ãƒ¬ãƒ¼ãƒ¤ã®è² ã‘?
             if (IsPlayerLose(stage)) {
                 DrawGameOver(stage);
                 goto exit;
             }
-            // ƒvƒŒ[ƒ„‚ÌŸ‚¿
+            // ãƒ—ãƒ¬ãƒ¼ãƒ¤ã®å‹ã¡
             if (IsPlayerWin(stage)) {
                 DrawEnding(stage);
                 goto exit;
             }
         }
-        // ”N‰z‚µ
+        // å¹´è¶Šã—
         NextYear(stage);
-        // u–{”\›‚Ì•ÏvƒCƒxƒ“ƒg
-        if (IsHonnojiEvent(stage)) {
-            SetHonnojiEvent(stage);
-            DrawHonnojiEvent(stage);
-        }
     }
 exit:
     FinalizeStage(stage);
     FinalizeChronology(chro);
 }
 
-static void DrawHonnojiEvent(Stage* stage)
-{
-    DrawScreen(stage, DM_Event, 0);
-    printf(
-        "–¾’qŒõGu‚Ä‚«‚Í@–{”\›‚É@‚ ‚èI\n"
-        "\n"
-        "–¾’qŒõG‚ª@–{”\›‚Ì@D“cM’·‚ğ@‚µ‚ã‚¤‚°‚«‚µ‚½I\n"
-        "\n"
-        "D“cM’·u‚º‚Ğ‚É@‚¨‚æ‚Î‚¸c\n"
-        "\n"
-        "D“cM’·‚Í@–{”\›‚É@‚Ğ‚ğ‚Í‚È‚¿@‚¶‚ª‚¢‚µ‚½I\n"
-        "\n"
-        "‚²‚¶‚ÂA‰HÄG‹g‚ª@Rè‚Ì‚½‚½‚©‚¢‚Å@–¾’qŒõG‚ğ@‚½‚¨‚µA\n"
-        "D“c‚¯‚Ì@‚±‚¤‚¯‚¢‚Ì@‚¿‚¢‚ğ@‚³‚ñ‚¾‚Â‚µ‚½I\n");
-
-    WaitKey();
-}
-
 static void DrawGameOver(Stage* stage)
 {
     DrawScreen(stage, DM_GameOver, 0);
-    // ”N•\‚ğ•\¦
+    // å¹´è¡¨ã‚’è¡¨ç¤º
     PrintChronology(stage->chro);
     putchar('\n');
-    printf("‚f‚`‚l‚d@‚n‚u‚d‚q\n");
+    printf("ï¼§ï¼¡ï¼­ï¼¥ã€€ï¼¯ï¼¶ï¼¥ï¼²\n");
     WaitKey();
 }
 
 static void DrawEnding(Stage* stage)
 {
     DrawScreen(stage, DM_Ending, 0);
-    // ”N•\‚ğ•\¦
+    // å¹´è¡¨ã‚’è¡¨ç¤º
     PrintChronology(stage->chro);
     int year = stage->year + 3;
     const char* name1 = GetLordFamilyName(stage, stage->playerLord);
     const char* name2 = GetLordFirstName(stage, stage->playerLord);
-    printf("%d‚Ë‚ñ@ %s %s‚ª@‚¹‚¢‚¢‚½‚¢‚µ‚å‚¤‚®‚ñ‚É@‚É‚ñ‚º‚ç‚ê‚é\n", year, name1, name2);
-    printf("%d‚Ë‚ñ@%s%s‚ª@%s‚Î‚­‚Ó‚ğ@‚Ğ‚ç‚­\n", year, name1, name2, name1);
+    printf("%dã­ã‚“ã€€ %sï¼ˆ%sï¼‰ãŒã€€ã¦ã‚“ã‹ã‚’ã€€ã¨ã†ã„ã¤ã™ã‚‹\n", year, name1, name2);
     putchar('\n');
-    printf("‚s‚g‚d@‚d‚m‚c");
+    printf("ï¼´ï¼¨ï¼¥ã€€ï¼¥ï¼®ï¼¤");
     WaitKey();
 }

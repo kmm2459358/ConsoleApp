@@ -1,5 +1,5 @@
-//======================================
-//	í‘ƒVƒ~ƒ…ƒŒ[ƒVƒ‡ƒ“  ƒXƒe[ƒW
+ï»¿//======================================
+//	æˆ¦å›½ã‚·ãƒŸãƒ¥ãƒ¬ãƒ¼ã‚·ãƒ§ãƒ³  ã‚¹ãƒ†ãƒ¼ã‚¸
 //======================================
 #include "Stage.h"
 #include "Lord.h"
@@ -11,7 +11,7 @@
 #include <stdio.h>  // printf(),putchar()
 #include <stdlib.h> // calloc(),free(),exit()
 #include <assert.h> // assert()
-// ŠÖ”ƒvƒƒgƒ^ƒCƒv
+// é–¢æ•°ãƒ—ãƒ­ãƒˆã‚¿ã‚¤ãƒ—
 static void printTurnOrder(Stage* stage, int turn);
 static void ExecPlayerTurn(Stage* stage, CastleId currentCastle, Command cmd, CastleId targetCastle, int sendTroopCount);
 static void ExecNpcTurn(Stage* stage, CastleId currentCastle, Command cmd, CastleId targetCastle, int sendTroopCount);
@@ -22,30 +22,30 @@ static int getCastleCount(Stage* stage, LordId lord);
 static Castle* GetCastle(Stage* stage, CastleId id);
 static LordId changeLordId(Stage* stage, LordId id);
 
-// ‰Šú‰»
+// åˆæœŸåŒ–
 void InitializeStage(Stage* stage, Castle castles[], int castlesSize, int startYear, Chronology* chro)
 {
 	stage->year = startYear;
 	stage->chro = chro;
 	stage->castles = (Castle*)calloc(castlesSize, sizeof(Castle));
 	if (stage->castles == nullptr) {
-		printf("calloc¸”s");
+		printf("callocå¤±æ•—");
 		exit(1);
 	}
 	for (int i = 0; i < castlesSize; i++) {
-		stage->castles[i] = castles[i];  // ƒRƒs[
+		stage->castles[i] = castles[i];  // ã‚³ãƒ”ãƒ¼
 	}
 	stage->castlesSize = castlesSize;
 	stage->playerLord = LORD_NONE;
 	stage->isHonnojiEvent = false;
 }
-// Œãn––
+// å¾Œå§‹æœ«
 void FinalizeStage(Stage* stage)
 {
 	free(stage->castles);
 	stage->castles = nullptr;
 }
-// ƒXƒ^[ƒg
+// ã‚¹ã‚¿ãƒ¼ãƒˆ
 void StartStage(Stage* stage)
 {
 	for (int i = 0; i < stage->castlesSize; i++) {
@@ -53,46 +53,46 @@ void StartStage(Stage* stage)
 		SetCastleTroopCount(stage, (CastleId)i, TROOP_BASE);
 	}
 }
-// ƒvƒŒ[ƒ„‘å–¼‚ÌƒZƒbƒg
+// ãƒ—ãƒ¬ãƒ¼ãƒ¤å¤§åã®ã‚»ãƒƒãƒˆ
 void SetPlayerLord(Stage* stage, CastleId castleId)
 {
 	stage->playerLord = GetCastleOwner(stage, castleId);
 }
-// ƒCƒ“ƒgƒƒƒbƒZ[ƒW
+// ã‚¤ãƒ³ãƒˆãƒ­ãƒ¡ãƒƒã‚»ãƒ¼ã‚¸
 void IntroStage(Stage* stage, CastleId playerCastle)
 {
-	printf("%s‚³‚ÜA %s‚©‚ç@‚Ä‚ñ‚©‚Æ‚¤‚¢‚Â‚ğ\n‚ß‚´‚µ‚Ü‚µ‚å‚¤‚¼I\n"
+	printf("%sã•ã¾ã€ %sã‹ã‚‰ã€€ã¦ã‚“ã‹ã¨ã†ã„ã¤ã‚’\nã‚ã–ã—ã¾ã—ã‚‡ã†ãï¼\n"
 		, GetLordFirstName(stage, stage->playerLord)
 		, GetCastleName(stage, playerCastle)
 	);
 	WaitKey();
 }
-// ƒXƒNƒŠ[ƒ“•`‰æ
+// ã‚¹ã‚¯ãƒªãƒ¼ãƒ³æç”»
 void DrawScreen(Stage* stage, DrawMode mode, int turn)
 {
 	ClearScreen();
 	printf("%s",
 		//0       1         2         3         4   
-		//23456789012345678901234567890123456789012345678901234
-		"1570‚Ë‚ñ@````````````````@@@@@`\n"      // 01
-		"@@@@@````````````````@0•Ä‘ò5@`\n"      // 02
-		"``````````````````1t“ú5@ˆÉ’B@``\n"      // 03
-		"```````````````@``ã™@@@@@``\n"      // 04
-		"```````````````@`@@@@@@@@``\n"      // 05
-		"``````````````@@@@@2çUçP5@@@``\n"      // 06
-		"`````````````@@@@@@•“c@@@```\n"      // 07
-		"``````@@@@@@@5Šò•Œ5@@@@@@@@```\n"      // 08
-		"````@7‹g“c5@6“ñğ5@D“c@4‰ªè5@3¬“c5@```\n"      // 09
-		"```@@–Ñ—˜@@‘«—˜@@@@@“¿ì@@–kğ`````\n"      // 10
-		"``@```````@@@``````````````\n"      // 11
-		"`@@@`@8‰ª–L5``@```````````````\n"      // 12
-		"`@@@``’·@```````````````````\n"      // 13
-		"`9“àé5```````````````````````\n"      // 14
-		"`“‡’Ã````````````````````````\n"      // 15
-		"```````````````````````````\n"      // 16
-		"\n");
+		//2345678901234567890123456789012345678901234567890123
+		" 196ã­ã‚“ã€€ã€€ã€€ã€€ã€€ã€€ã€€ã€€ã€€ã€€9å¹½å·5ã€€ã€€ã€€\n"    // 01
+		"ã€€ã€€ã€€ã€€ã€€ã€€ã€€ã€€ã€€ã€€ã€€ã€€ã€€ã€€å…¬å­«ã€€ï½ã€€ï½\n"    // 02
+		"8æ¶¼å·5ã€€ã€€ã€€ã€€ã€€ã€€2å†€å·5ã€€ã€€ã€€ï½ï½ï½ï½ï½\n"    // 03
+		"é¦¬é¨°ã€€ã€€ã€€ã€€ã€€ã€€ã€€è¢ç´¹ã€€ã€€ï½ï½ï½ï½ï½ï½ï½\n"    // 04
+		"ã€€ã€€ã€€ã€€ã€€ã€€ã€€ã€€ã€€ã€€ã€€ã€€ã€€ã€€ï½ï½ã€€ã€€ï½ï½\n"    // 05
+		"ã€€ã€€ã€€ã€€ã€€ã€€ã€€ã€€ã€€3å…—å·5ã€€ã€€ã€€ã€€ã€€ï½ï½ï½\n"    // 06
+		"ã€€ã€€ã€€0å¸éš¸5ã€€ã€€ã€€æ›¹æ“ã€€ã€€4å¾å·5ã€€ï½ï½ï½\n"    // 07
+		"ã€€ã€€ã€€æå‚•ã€€ã€€ã€€ã€€ã€€ã€€ã€€ã€€å‘‚å¸ƒã€€ï½ï½ï½ï½\n"    // 08
+		"ã€€ã€€ã€€ã€€ã€€ã€€ã€€ã€€ã€€1è±«å·5ã€€ã€€ã€€ã€€ã€€ï½ï½ï½\n"    // 09
+		"ã€€ã€€ã€€ã€€ã€€ã€€ã€€ã€€ã€€åŠ‰å‚™ã€€ã€€ã€€ã€€ã€€ã€€ã€€ï½ï½\n"    // 10
+		"7ç›Šå·5ã€€ã€€5èŠå·5ã€€ã€€ã€€ã€€6æšå·5ã€€ã€€ã€€ï½ï½\n"    // 11
+		"åŠ‰ç’‹ã€€ã€€ã€€åŠ‰è¡¨ã€€ã€€ã€€ã€€ã€€å­«ç­–ã€€ã€€ã€€ã€€ï½ï½\n"    // 12
+		"ã€€ã€€ã€€ã€€ã€€ã€€ã€€ã€€ã€€ã€€ã€€ã€€ã€€ã€€ã€€ã€€ã€€ï½ï½ï½\n"    // 13
+		"ã€€ã€€ã€€ã€€ã€€ã€€ã€€ã€€ã€€ã€€ã€€ã€€ã€€ã€€ã€€ã€€ã€€ï½ï½ï½\n"    // 14
+		"ã€€ã€€ã€€ã€€ã€€ã€€ã€€ã€€ã€€ã€€ã€€ã€€ã€€ã€€ã€€ï½ï½ï½ï½ï½\n"    // 15
+		"ã€€ã€€ã€€ã€€ã€€ã€€ã€€ã€€ã€€ï½ï½ï½ï½ï½ï½ï½ï½ï½ï½ï½\n"    // 16
+	);
 
-	PrintCursor(1, 1); printf("%4d‚Ë‚ñ", stage->year);
+	PrintCursor(1, 1); printf("%4dã­ã‚“", stage->year);
 	for (int i = 0; i < stage->castlesSize; i++) {
 		Castle* castle = GetCastle(stage, (CastleId)i);
 		int curx = GetCastleCurx(castle);
@@ -107,7 +107,7 @@ void DrawScreen(Stage* stage, DrawMode mode, int turn)
 	}
 	PrintCursor(1, 18);
 }
-// ƒ^[ƒ“‚Ì‡”Ô‚ğƒVƒƒƒbƒtƒ‹
+// ã‚¿ãƒ¼ãƒ³ã®é †ç•ªã‚’ã‚·ãƒ£ãƒƒãƒ•ãƒ«
 void MakeTurnOrder(Stage* stage)
 {
 	CastleId* turnOrder = stage->turnOrder;
@@ -116,13 +116,13 @@ void MakeTurnOrder(Stage* stage)
 	}
 	for (int i = 0; i < stage->castlesSize; i++) {
 		int j = GetRand(stage->castlesSize);
-		//turnOrder[i]‚ÆturnOrder[j]‚ğƒXƒƒbƒv
+		// turnOrder[i]ã¨turnOrder[j]ã‚’ã‚¹ãƒ¯ãƒƒãƒ—
 		CastleId tmp = turnOrder[i];
 		turnOrder[i] = turnOrder[j];
 		turnOrder[j] = tmp;
 	}
 }
-// ”N‰z‚µ
+// å¹´è¶Šã—
 void NextYear(Stage* stage)
 {
 	stage->year++;
@@ -130,27 +130,16 @@ void NextYear(Stage* stage)
 		Castle* castle = GetCastle(stage, (CastleId)i);
 		int troopCount = GetCastleTroopCount(castle);
 		if (troopCount < TROOP_BASE) {
-			// •º”‚ª BASE‚æ‚è¬‚È‚ç ‘ˆõ
+			// å…µæ•°ãŒ BASEã‚ˆã‚Šå°ãªã‚‰ å¢—å“¡
 			AddCastleTroopCount(castle, +1);
 		}
 		else if (troopCount > TROOP_BASE) {
-			// •º”‚ª BASE‚æ‚è‘å‚È‚ç Œ¸ˆõ
+			// å…µæ•°ãŒ BASEã‚ˆã‚Šå¤§ãªã‚‰ æ¸›å“¡
 			AddCastleTroopCount(castle, -1);
 		}
 	}
 }
-// u–{”\›‚Ì•Ïv‚©?
-bool IsHonnojiEvent(Stage* stage)
-{
-	return stage->year == 1582
-		&& GetCastleOwner(stage, CASTLE_NIJO) == LORD_ODA;
-}
-// u–{”\›‚Ì•Ïvƒtƒ‰ƒOƒZƒbƒg
-void SetHonnojiEvent(Stage* stage)
-{
-	stage->isHonnojiEvent = true;
-}
-// ƒ^[ƒ“Às
+// ã‚¿ãƒ¼ãƒ³å®Ÿè¡Œ
 void ExecTurn(Stage* stage, int turn)
 {
 	CastleId currentCastle = stage->turnOrder[turn];
@@ -159,7 +148,7 @@ void ExecTurn(Stage* stage, int turn)
 
 	DrawScreen(stage, DM_Turn, turn);
 	printTurnOrder(stage, turn);
-	printf("%s‚¯‚Ì@%s‚Ì@‚Ğ‚å‚¤‚¶‚å‚¤‚¿‚ã‚¤c\n"
+	printf("%sã®ã€€%sã®ã€€ã²ã‚‡ã†ã˜ã‚‡ã†ã¡ã‚…ã†â€¦\n"
 		, GetLordFamilyName(owner)
 		, GetCastleName(stage, currentCastle)
 	);
@@ -177,18 +166,18 @@ void ExecTurn(Stage* stage, int turn)
 		ExecNpcTurn(stage, currentCastle, cmd, targetCastle, sendTroopCount);
 	}
 }
-// ƒvƒŒ[ƒ„ƒ^[ƒ“‚ğÀs
+// ãƒ—ãƒ¬ãƒ¼ãƒ¤ã‚¿ãƒ¼ãƒ³ã‚’å®Ÿè¡Œ
 static void ExecPlayerTurn(Stage* stage, CastleId currentCastle, Command cmd, CastleId targetCastle, int sendTroopCount)
 {
 	Castle* castle = GetCastle(stage, currentCastle);
 	switch (cmd) {
 	case CMD_Cancel:
-		printf("‚µ‚ñ‚®‚ñ‚ğ@‚Æ‚è‚â‚ß‚Ü‚µ‚½\n");
+		printf("ã—ã‚“ãã‚“ã‚’ã€€ã¨ã‚Šã‚„ã‚ã¾ã—ãŸ\n");
 		WaitKey();
 		break;
 	case CMD_Transit:
 		TransitTroop(stage, castle, targetCastle, sendTroopCount);
-		printf("%s‚É@%d‚É‚ñ@‚¢‚Ç‚¤@‚µ‚Ü‚µ‚½"
+		printf("%sã«ã€€%dã«ã‚“ã€€ã„ã©ã†ã€€ã—ã¾ã—ãŸ"
 			, GetCastleName(stage, targetCastle)
 			, sendTroopCount * TROOP_UNIT
 		);
@@ -196,7 +185,7 @@ static void ExecPlayerTurn(Stage* stage, CastleId currentCastle, Command cmd, Ca
 		break;
 
 	case CMD_Attack:
-		printf("%s‚É@%d‚É‚ñ‚Å@‚µ‚ã‚Â‚¶‚ñ‚¶‚á`II\n"
+		printf("%sã«ã€€%dã«ã‚“ã§ã€€ã—ã‚…ã¤ã˜ã‚“ã˜ã‚ƒï½ï¼ï¼\n"
 			, GetCastleName(stage, targetCastle)
 			, sendTroopCount * TROOP_UNIT
 		);
@@ -205,19 +194,19 @@ static void ExecPlayerTurn(Stage* stage, CastleId currentCastle, Command cmd, Ca
 		break;
 	}
 }
-// NPCƒ^[ƒ“‚ğÀs
+// NPCã‚¿ãƒ¼ãƒ³ã‚’å®Ÿè¡Œ
 static void ExecNpcTurn(Stage* stage, CastleId currentCastle, Command cmd, CastleId targetCastle, int sendTroopCount)
 {
 	Castle* castle = GetCastle(stage, currentCastle);
 	LordId owner = GetCastleOwner(stage, currentCastle);
 	switch (cmd) {
 	case CMD_Cancel:
-		//printf("‚µ‚ñ‚®‚ñ‚ğ@‚Æ‚è‚â‚ß‚Ü‚µ‚½\n");
+		//printf("ã—ã‚“ãã‚“ã‚’ã€€ã¨ã‚Šã‚„ã‚ã¾ã—ãŸ\n");
 		//WaitKey();
 		break;
 	case CMD_Transit:
 		TransitTroop(stage, castle, targetCastle, sendTroopCount);
-		printf("%s‚©‚ç@%s‚É@%d‚É‚ñ@‚¢‚Ç‚¤@‚µ‚Ü‚µ‚½\n"
+		printf("%sã‹ã‚‰ã€€%sã«ã€€%dã«ã‚“ã€€ã„ã©ã†ã€€ã—ã¾ã—ãŸ\n"
 			, GetCastleName(stage, currentCastle)
 			, GetCastleName(stage, targetCastle)
 			, sendTroopCount * TROOP_UNIT
@@ -226,7 +215,7 @@ static void ExecNpcTurn(Stage* stage, CastleId currentCastle, Command cmd, Castl
 		break;
 
 	case CMD_Attack:
-		printf("%s‚Ì@%s%s‚ª@%s‚É@‚¹‚ß‚±‚İ‚Ü‚µ‚½I\n"
+		printf("%sã®ã€€%sï¼ˆ%sï¼‰ãŒã€€%sã«ã€€ã›ã‚ã“ã¿ã¾ã—ãŸï¼\n"
 			, GetCastleName(stage, currentCastle)
 			, GetLordFamilyName(stage, owner)
 			, GetLordFirstName(stage, owner)
@@ -237,54 +226,54 @@ static void ExecNpcTurn(Stage* stage, CastleId currentCastle, Command cmd, Castl
 		break;
 	}
 }
-// ˆÚ‘—ˆ—
+// ç§»é€å‡¦ç†
 static void TransitTroop(Stage* stage, Castle* castle, CastleId targetCastle, int sendTroopCount)
 {
 	AddCastleTroopCount(castle, -sendTroopCount);
 	Castle* target = GetCastle(stage, targetCastle);
 	AddCastleTroopCount(target, sendTroopCount);
 }
-// ”h•º(UŒ‚)ˆ—
+// æ´¾å…µ(æ”»æ’ƒ)å‡¦ç†
 static void AttackTroop(Stage* stage, Castle* castle, CastleId targetCastle, int sendTroopCount)
 {
 	AddCastleTroopCount(castle, -sendTroopCount);
 	LordId offenseLord = GetCastleOwner(castle);
 	SiegeBattle(stage, offenseLord, sendTroopCount, targetCastle);
 }
-// ƒvƒŒ[ƒ„‚Ì•‰‚¯?
+// ãƒ—ãƒ¬ãƒ¼ãƒ¤ã®è² ã‘?
 bool IsPlayerLose(Stage* stage)
 {
-	// ƒvƒŒ[ƒ„‚Ìé‚ª–³‚­‚È‚Á‚½‚ç•‰‚¯!!
+	// ãƒ—ãƒ¬ãƒ¼ãƒ¤ã®åŸãŒç„¡ããªã£ãŸã‚‰è² ã‘!!
 	return getCastleCount(stage, stage->playerLord) == 0;
 }
-// ƒvƒŒ[ƒ„‚ÌŸ‚¿?
+// ãƒ—ãƒ¬ãƒ¼ãƒ¤ã®å‹ã¡?
 bool IsPlayerWin(Stage* stage)
 {
-	// ƒvƒŒ[ƒ„‚Ìé‚Å–„‚Ü‚Á‚½‚çŸ‚¿
+	// ãƒ—ãƒ¬ãƒ¼ãƒ¤ã®åŸã§åŸ‹ã¾ã£ãŸã‚‰å‹ã¡
 	return getCastleCount(stage, stage->playerLord) == stage->castlesSize;
 }
-// ƒ^[ƒ“‡”Ô‚ğƒvƒŠƒ“ƒg
+// ã‚¿ãƒ¼ãƒ³é †ç•ªã‚’ãƒ—ãƒªãƒ³ãƒˆ
 static void printTurnOrder(Stage* stage, int turn)
 {
 	for (int i = 0; i < stage->castlesSize; i++) {
-		const char* cur = (i == turn) ? "„" : "@";
+		const char* cur = (i == turn) ? "ï¼" : "ã€€";
 		CastleId id = (CastleId)stage->turnOrder[i];
 		printf("%s%s", cur, GetCastleMapName(stage, id));
 	}
 	putchar('\n');
 	putchar('\n');
 }
-// •ïˆÍí“¬‚ğs‚¤
+// åŒ…å›²æˆ¦é—˜ã‚’è¡Œã†
 static void SiegeBattle(Stage* stage, LordId offenseLord, int offenseTroopCount, CastleId defenseCastle)
 {
 	ClearScreen();
-	printf("` %s‚Ì@‚½‚½‚©‚¢`\n", GetCastleName(stage, defenseCastle));
+	printf("ï½ %sã®ã€€ãŸãŸã‹ã„ï½\n", GetCastleName(stage, defenseCastle));
 	putchar('\n');
 	LordId defenseLord = GetCastleOwner(stage, defenseCastle);
 	int defenseTroopCount = GetCastleTroopCount(stage, defenseCastle);
 
 	while (true) {
-		printf("%s‚®‚ñi%4d‚É‚ñj@‚w@%s‚®‚ñi%4d‚É‚ñj\n"
+		printf("%sãã‚“ï¼ˆ%5dã«ã‚“ï¼‰ã€€ï¼¸ã€€%sãã‚“ï¼ˆ%5dã«ã‚“ï¼‰\n"
 			, GetLordFamilyName(offenseLord)
 			, offenseTroopCount * TROOP_UNIT
 			, GetLordFamilyName(defenseLord)
@@ -307,16 +296,16 @@ static void SiegeBattle(Stage* stage, LordId offenseLord, int offenseTroopCount,
 	putchar('\n');
 
 	if (defenseTroopCount <= 0) {
-		// –hŒä‘¤‚Ì•‰‚¯
+		// é˜²å¾¡å´ã®è² ã‘
 		SetCastleOwner(stage, defenseCastle, offenseLord);
 		SetCastleTroopCount(stage, defenseCastle, offenseTroopCount);
 
-		printf("%s@‚ç‚­‚¶‚å‚¤II\n"
+		printf("%sã€€ã‚‰ãã˜ã‚‡ã†ï¼ï¼\n"
 			, GetCastleName(stage, defenseCastle)
 		);
 		putchar('\n');
 
-		printf("%s‚Í@ %s‚¯‚Ì@‚à‚Ì‚Æ‚È‚è‚Ü‚·\n"
+		printf("%sã¯ã€€ %sã®ã€€ã‚‚ã®ã¨ãªã‚Šã¾ã™\n"
 			, GetCastleName(stage, defenseCastle)
 			, GetLordFamilyName(offenseLord)
 		);
@@ -324,7 +313,7 @@ static void SiegeBattle(Stage* stage, LordId offenseLord, int offenseTroopCount,
 
 		if (getCastleCount(stage, defenseLord) <= 0) {
 			RecordChronology(stage->chro
-				, "%d‚Ë‚ñ@%s%s‚ª@%s‚Å@%s%s‚ğ@‚Ù‚ë‚Ú‚·\n"
+				, "%dã­ã‚“ã€€%sï¼ˆ%sï¼‰ãŒã€€%sã§ã€€%sï¼ˆ%sï¼‰ã‚’ã€€ã»ã‚ã¼ã™\n"
 				, stage->year
 				, GetLordFamilyName(stage, offenseLord)
 				, GetLordFirstName(stage, offenseLord)
@@ -335,104 +324,95 @@ static void SiegeBattle(Stage* stage, LordId offenseLord, int offenseTroopCount,
 		}
 	}
 	else {
-		// UŒ‚‘¤‚Ì•‰‚¯
-		printf("%s‚®‚ñ@‚©‚¢‚ß‚ÂII\n"
+		// æ”»æ’ƒå´ã®è² ã‘
+		printf("%sãã‚“ã€€ã‹ã„ã‚ã¤ï¼ï¼\n"
 			, GetLordFamilyName(stage, offenseLord)
 		);
 		putchar('\n');
-		printf("%s‚®‚ñ‚ª@%s‚ğ@‚Ü‚à‚è‚«‚è‚Ü‚µ‚½I\n"
+		printf("%sãã‚“ãŒã€€%sã‚’ã€€ã¾ã‚‚ã‚Šãã‚Šã¾ã—ãŸï¼\n"
 			, GetLordFamilyName(stage, defenseLord)
 			, GetCastleName(stage, defenseCastle)
 		);
 		WaitKey();
 	}
 }
-// ”CˆÓ‚Ìowner‚Ìé‚ğ”‚¦‚é
+// ä»»æ„ã®ownerã®åŸã‚’æ•°ãˆã‚‹
 static int getCastleCount(Stage* stage, LordId lord)
 {
 	int castleCount = 0;
 	for (int i = 0; i < stage->castlesSize; i++) {
-		LordId owner = GetCastleOwner(stage, (CastleId)i);
-		if (owner == lord) {
+		Castle* castle = GetCastle(stage, (CastleId)i);
+		if (castle->owner == lord) {
 			castleCount++;
 		}
 	}
 	return castleCount;
 }
 //---------------------------------------------------------
-// é‚Ì–¼‘O‚ğ“¾‚é
+// åŸã®åå‰ã‚’å¾—ã‚‹
 const char* GetCastleName(Stage* stage, CastleId id)
 {
 	Castle* castle = GetCastle(stage, id);
 	return GetCastleName(castle);
 }
-// é‚Ìéå‚ğæ“¾
+// åŸã®åŸä¸»ã‚’å–å¾—
 LordId GetCastleOwner(Stage* stage, CastleId id)
 {
 	Castle* castle = GetCastle(stage, id);
 	return GetCastleOwner(castle);
 }
-// é‚Ìéå‚ğƒZƒbƒg
+// åŸã®åŸä¸»ã‚’ã‚»ãƒƒãƒˆ
 void SetCastleOwner(Stage* stage, CastleId id, LordId owner)
 {
 	Castle* castle = GetCastle(stage, id);
-	return SetCastleOwner(castle, owner);
+	SetCastleOwner(castle, owner);
 }
-// •º”‚ğ“¾‚é
+// å…µæ•°ã‚’å¾—ã‚‹
 int GetCastleTroopCount(Stage* stage, CastleId id)
 {
 	Castle* castle = GetCastle(stage, id);
 	return GetCastleTroopCount(castle);
 }
-// •º”‚ğƒZƒbƒg
+// å…µæ•°ã‚’ã‚»ãƒƒãƒˆ
 void SetCastleTroopCount(Stage* stage, CastleId id, int troopCount)
 {
 	Castle* castle = GetCastle(stage, id);
-	return SetCastleTroopCount(castle, troopCount);
+	SetCastleTroopCount(castle, troopCount);
 }
-// é‚Ì‹ß—×ƒŠƒXƒg‚ğæ“¾
+// åŸã®è¿‘éš£ãƒªã‚¹ãƒˆã‚’å–å¾—
 CastleId* GetCastleConnectedList(Stage* stage, CastleId id)
 {
 	Castle* castle = GetCastle(stage, id);
 	return GetCastleConnectedList(castle);
 }
-// é‚Ìƒ}ƒbƒv–¼‚ğæ“¾
+// åŸã®ãƒãƒƒãƒ—åã‚’å–å¾—
 const char* GetCastleMapName(Stage* stage, CastleId id)
 {
 	Castle* castle = GetCastle(stage, id);
 	return GetCastleMapName(castle);
 }
-// id‚©‚ç Castle* ‚ğæ“¾
+// idã‹ã‚‰ Castle* ã‚’å–å¾—
 static Castle* GetCastle(Stage* stage, CastleId id)
 {
 	assert(0 <= id && id < stage->castlesSize);
 	return &stage->castles[id];
 }
 //--------------------------------------
-// éå‚Ì–¼‚ğæ“¾
+// åŸä¸»ã®åã‚’å–å¾—
 const char* GetLordFirstName(Stage* stage, LordId id)
 {
 	id = changeLordId(stage, id);
 	return GetLordFirstName(id);
 }
-// éå‚Ì©‚ğæ“¾
+// åŸä¸»ã®å§“ã‚’å–å¾—
 const char* GetLordFamilyName(Stage* stage, LordId id)
 {
 	id = changeLordId(stage, id);
 	return GetLordFamilyName(id);
 }
-// éå‚Ìƒ}ƒbƒvã‚Ì–¼‘O‚ğæ“¾
+// åŸä¸»ã®ãƒãƒƒãƒ—ä¸Šã®åå‰ã‚’å–å¾—
 const char* GetLordMapName(Stage* stage, LordId id)
 {
 	id = changeLordId(stage, id);
 	return GetLordMapName(id);
-}
-// éåID‚Ì•ÏX
-static LordId changeLordId(Stage* stage, LordId id)
-{
-	// u–{”\›‚Ì•ÏvŒã‚ÍAD“cM’·=>‰HÄG‹g
-	if (id == LORD_ODA && stage-> isHonnojiEvent) {
-		id = LORD_HASHIBA;
-	}
-	return id;
 }
