@@ -69,7 +69,6 @@ bool ExecEnemyTurn(TurnBattle* btl, Command cmd)
 // コマンド実行(offense:攻撃キャラ defense:防御キャラ)
 static void execCommand(TurnBattle* btl, Command cmd, Character* offense, Character* defense)
 {
-	if (offense == btl->enemy && CanSpellCharacter(offense) == true && Character->hp);
 	int dmg;
 	switch (cmd) {
 	case COMMAND_FIGHT:
