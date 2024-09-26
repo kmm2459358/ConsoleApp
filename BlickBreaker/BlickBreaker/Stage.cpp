@@ -4,6 +4,7 @@
 #include "Stage.h"
 #include "Utility.h"
 #include <stdio.h>
+#include <math.h>
 
 // 関数プロトタイプ
 static void InitPaddle(Stage* stage);
@@ -48,8 +49,10 @@ void ResetBall(Stage* stage)
 {
 	stage->ballX = GetRand(FIELD_WIDTH);
 	stage->ballY = FIELD_HEIGHT / 3;
-	stage->ballVelocityX = GetRand(2) == 0 ? 1 : -1;
-	stage->ballVelocityY = 1;
+	stage->ballVelocityX_f = GetRand(2) == 0 ? 1 : -1;
+	stage->ballVelocityY_f = 1;
+	stage->ballX_f = stage->ballX;
+	stage->ballY_f = stage->ballY;
 }
 void DrawScreen(Stage* stage, DrawMode mode)
 {
@@ -115,28 +118,30 @@ static void DrawHorizontalWall()
 // ボールの移動
 void MoveBall(Stage* stage)
 {
-	stage->ballX += stage->ballVelocityX;
-	stage->ballY += stage->ballVelocityY;
+	stage->ballX_f += stage->ballVelocityX_f;
+	stage->ballY_f += stage->ballVelocityY_f;
+	stage->ballX = (int)floor(stage->ballX_f + 0.5f);
+	stage->ballY = (int)floor(stage->ballY_f + 0.5f);
 
 	// ボールが端にあるなら速度反転
 	if (stage->ballX <= 0) {
-		stage->ballVelocityX = 1;
+		stage->ballVelocityX_f = 1;
 	}
 	else if (stage->ballX >= FIELD_WIDTH - 1) {
-		stage->ballVelocityX = -1;
+		stage->ballVelocityX_f = -1;
 	}
 	if (stage->ballY <= 0) {
-		stage->ballVelocityY = 1;
+		stage->ballVelocityY_f = 1;
 	}
 	else if (stage->ballY >= FIELD_HEIGHT - 1) {
-		stage->ballVelocityY = -1;
+		stage->ballVelocityY_f = -1;
 	}
 	// ボールがハドルに当たったら反射
 	if (stage->ballY == stage->paddleY - 1) {
 		if (stage->ballX >= stage->paddleX - 1
 			&& stage->ballX <= stage->paddleX + PADDLE_WIDTH + 1) {
-			stage->ballVelocityX = (stage->ballX < stage->paddleX + PADDLE_WIDTH / 2) ? -1 : 1;
-			stage->ballVelocityY = -1;
+			stage->ballVelocityX_f = (stage->ballX < stage->paddleX + PADDLE_WIDTH / 2) ? -1 : 1;
+			stage->ballVelocityY_f = -1;
 		}
 	}
 	// ボールの上3コマのブロックを消す
@@ -144,7 +149,7 @@ void MoveBall(Stage* stage)
 		int y = stage->ballY - 1;
 		if (GetField(stage, x, y) == FIELD_BLOCK) {
 			SetField(stage, x, y, FIELD_NONE);
-			stage->ballVelocityY = 1;
+			stage->ballVelocityY_f = 1;
 		}
 	}
 }

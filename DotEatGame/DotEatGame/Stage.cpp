@@ -31,7 +31,7 @@ const char defaultMaze[MAZE_HEIGHT][MAZE_WIDTH + 1] = {
 	"#o###o###o###o###o#",
 	"#o# #o#ooooo#o# #o#",
 	"#o###o#o#o#o#o###o#",
-	"#ooooooo#o#ooooooo#",
+	"#ooooooooooooooooo#",
 	"#########o#########"
 };
 // ステージ初期化

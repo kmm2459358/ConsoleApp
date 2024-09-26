@@ -19,8 +19,10 @@ typedef enum {
 typedef struct {
 	int ballX;        // ボールの位置
 	int ballY;
-	int ballVelocityX; // ボールの速度
-	int ballVelocityY;
+	float ballX_f;
+	float ballY_f;
+	float ballVelocityX_f; // ボールの速度
+	float ballVelocityY_f;
 	int paddleX;       // パトル(左端)の位置
 	int paddleY;
 	Field field[FIELD_HEIGHT][FIELD_WIDTH];
